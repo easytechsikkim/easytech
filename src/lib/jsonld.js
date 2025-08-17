@@ -1,4 +1,4 @@
-const BASE_URL = "https://easytech-gangtok.firebaseapp.com";
+const BASE_URL = "https://easytechsikkim.vercel.app/";
 
 export function generateBusinessJsonLd() {
     return {
