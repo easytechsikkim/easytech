@@ -1,11 +1,11 @@
 "use client";
 
-import React, {useEffect, useState} from "react";
-import {useLocation, useNavigate} from "react-router-dom";
-import {addDoc, collection, doc, getDoc, serverTimestamp} from "firebase/firestore";
-import {db} from "../../firebase.js";
-import {Loader2} from "lucide-react";
-import {toast} from "sonner";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { addDoc, collection, doc, getDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../../firebase.js";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function BookingPage() {
     const location = useLocation();
@@ -37,7 +37,7 @@ export default function BookingPage() {
                 } else if (serviceId) {
                     const docRef = doc(db, "services", serviceId);
                     const docSnap = await getDoc(docRef);
-                    if (docSnap.exists()) setService({id: docSnap.id, ...docSnap.data()});
+                    if (docSnap.exists()) setService({ id: docSnap.id, ...docSnap.data() });
                 }
             } catch (err) {
                 console.error("Error fetching service:", err);
@@ -49,7 +49,7 @@ export default function BookingPage() {
     }, [stateService, serviceId]);
 
     const handleChange = (e) => {
-        setFormData((prev) => ({...prev, [e.target.name]: e.target.value}));
+        setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
     const handleSubmit = async (e) => {
@@ -70,28 +70,28 @@ export default function BookingPage() {
             toast("Booking confirmed!");
             navigate("/");
         } catch (err) {
-            toast("Failed to save booking. Please try again.");
+            toast("Failed to save booking. Please try again.",err);
         }
     };
 
     if (loading)
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-100">
+            <div className="min-h-screen flex items-center justify-center bg-stone-50">
                 <div className="flex flex-col items-center gap-4">
-                    <Loader2 className="h-8 w-8 animate-spin text-blue-600"/>
-                    <p className="text-gray-600 text-lg">Loading service...</p>
+                    <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+                    <p className="text-stone-600 text-lg">Loading service...</p>
                 </div>
             </div>
         );
 
     if (!service)
         return (
-            <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-                <div className="bg-white rounded-xl shadow-lg p-6 text-center">
+            <div className="min-h-screen flex flex-col items-center justify-center bg-stone-50">
+                <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-md p-8 text-center">
                     <p className="text-red-600 text-lg mb-4">Service not found.</p>
                     <button
                         onClick={() => navigate(-1)}
-                        className="bg-blue-600 text-white hover:bg-blue-700 transition max-w-xs w-full py-2 rounded"
+                        className="bg-blue-600 text-white hover:bg-blue-700 transition-all rounded-xl px-6 py-2 font-medium shadow-sm hover:shadow-md"
                     >
                         Go Back
                     </button>
@@ -100,28 +100,28 @@ export default function BookingPage() {
         );
 
     return (
-        <div className="min-h-screen flex flex-col items-center bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 mt-10">
-            <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 sm:p-8">
+        <div className="min-h-screen flex flex-col items-center bg-stone-50 py-12 px-4 sm:px-6 lg:px-8 mt-10">
+                <div className="w-full max-w-4xl bg-white/90 backdrop-blur-sm rounded-xl shadow-md p-8 sm:p-10">
                 {/* Service Info */}
-                <div className="text-center mb-8">
-                    <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-4">{service.name}</h1>
-                    <img
-                        src={service.imageURL || "/placeholder.png"}
-                        alt={service.name}
-                        className="mx-auto w-full max-w-md h-48 sm:h-64 object-contain rounded-lg mb-4 shadow-sm"
-                        loading="lazy"
-                    />
-                    <p className="text-gray-600 mb-2 text-sm sm:text-base font-medium">{service.description}</p>
-                    <p className="text-blue-600 font-bold text-xl sm:text-2xl font-bold">₹{Number(service.price).toLocaleString()}</p>
+                <div className="text-center mb-10">
+                    <h1 className="text-3xl sm:text-4xl font-bold text-stone-900 mb-4">{service.name}</h1>
+                    <div className="relative w-full max-w-md mx-auto overflow-hidden rounded-lg shadow-sm mb-4">
+                        <img
+                            src={service.imageURL || "/placeholder.png"}
+                            alt={service.name}
+                            className="w-full h-56 sm:h-72 object-contain transition-transform duration-300 hover:scale-105"
+                            loading="lazy"
+                        />
+                    </div>
+                    <p className="text-stone-600 mb-2 text-sm sm:text-base mb-2">{service.description}</p>
+                    <p className="text-blue-600 font-bold text-2xl">Starting at ₹{Number(service.price).toLocaleString()}</p>
                 </div>
 
                 {/* Booking Form */}
-                <form className="w-full max-w-lg mx-auto space-y-4" onSubmit={handleSubmit}>
+                <form className="w-full max-w-2xl mx-auto space-y-6" onSubmit={handleSubmit}>
                     {/* Full Name */}
                     <div>
-                        <label className="block text-gray-700 font-medium mb-1">
-                            Full Name <span className="text-red-500">*</span>
-                        </label>
+                        <label className="block text-stone-500 text-sm mb-1">Full Name *</label>
                         <input
                             type="text"
                             name="fullName"
@@ -129,14 +129,15 @@ export default function BookingPage() {
                             onChange={handleChange}
                             placeholder="Your Full Name"
                             required
-                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full rounded-xl bg-stone-50 border border-stone-200 px-4 py-3
+                         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                         />
                     </div>
 
                     {/* Address Fields */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
-                            <label className="block text-gray-700 font-medium mb-1">Street Name *</label>
+                            <label className="block text-stone-500 text-sm mb-1">Street Name *</label>
                             <input
                                 type="text"
                                 name="street"
@@ -144,11 +145,12 @@ export default function BookingPage() {
                                 onChange={handleChange}
                                 placeholder="Street Name"
                                 required
-                                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full rounded-xl bg-stone-50 border border-stone-200 px-4 py-3
+                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                             />
                         </div>
                         <div>
-                            <label className="block text-gray-700 font-medium mb-1">City *</label>
+                            <label className="block text-stone-500 text-sm mb-1">City *</label>
                             <input
                                 type="text"
                                 name="city"
@@ -156,14 +158,15 @@ export default function BookingPage() {
                                 onChange={handleChange}
                                 placeholder="City"
                                 required
-                                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full rounded-xl bg-stone-50 border border-stone-200 px-4 py-3
+                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                             />
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
-                            <label className="block text-gray-700 font-medium mb-1">State *</label>
+                            <label className="block text-stone-500 text-sm mb-1">State *</label>
                             <input
                                 type="text"
                                 name="state"
@@ -171,25 +174,27 @@ export default function BookingPage() {
                                 onChange={handleChange}
                                 placeholder="State"
                                 required
-                                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full rounded-xl bg-stone-50 border border-stone-200 px-4 py-3
+                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                             />
                         </div>
                         <div>
-                            <label className="block text-gray-700 font-medium mb-1">Landmark</label>
+                            <label className="block text-stone-500 text-sm mb-1">Landmark</label>
                             <input
                                 type="text"
                                 name="landmark"
                                 value={formData.landmark}
                                 onChange={handleChange}
                                 placeholder="Landmark"
-                                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full rounded-xl bg-stone-50 border border-stone-200 px-4 py-3
+                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                             />
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
-                            <label className="block text-gray-700 font-medium mb-1">Pincode *</label>
+                            <label className="block text-stone-500 text-sm mb-1">Pincode *</label>
                             <input
                                 type="text"
                                 name="pincode"
@@ -197,11 +202,12 @@ export default function BookingPage() {
                                 onChange={handleChange}
                                 placeholder="Pincode"
                                 required
-                                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full rounded-xl bg-stone-50 border border-stone-200 px-4 py-3
+                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                             />
                         </div>
                         <div>
-                            <label className="block text-gray-700 font-medium mb-1">Mobile No *</label>
+                            <label className="block text-stone-500 text-sm mb-1">Mobile No *</label>
                             <input
                                 type="tel"
                                 name="mobile"
@@ -209,46 +215,50 @@ export default function BookingPage() {
                                 onChange={handleChange}
                                 placeholder="Mobile No"
                                 required
-                                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full rounded-xl bg-stone-50 border border-stone-200 px-4 py-3
+                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                             />
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
-                            <label className="block text-gray-700 font-medium mb-1">Alternative Mobile</label>
+                            <label className="block text-stone-500 text-sm mb-1">Alternative Mobile</label>
                             <input
                                 type="tel"
                                 name="altMobile"
                                 value={formData.altMobile}
                                 onChange={handleChange}
                                 placeholder="Alt Mobile"
-                                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full rounded-xl bg-stone-50 border border-stone-200 px-4 py-3
+                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                             />
                         </div>
 
                         {/* Date & Time */}
                         <div className="flex flex-col sm:flex-row gap-4">
                             <div className="flex-1">
-                                <label className="block text-gray-700 font-medium mb-1">Date *</label>
+                                <label className="block text-stone-500 text-sm mb-1">Date *</label>
                                 <input
                                     type="date"
                                     name="date"
                                     value={formData.date}
                                     onChange={handleChange}
                                     required
-                                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full rounded-xl bg-stone-50 border border-stone-200 px-4 py-3
+                             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                                 />
                             </div>
                             <div className="flex-1">
-                                <label className="block text-gray-700 font-medium mb-1">Time *</label>
+                                <label className="block text-stone-500 text-sm mb-1">Time *</label>
                                 <input
                                     type="time"
                                     name="time"
                                     value={formData.time}
                                     onChange={handleChange}
                                     required
-                                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full rounded-xl bg-stone-50 border border-stone-200 px-4 py-3
+                             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                                 />
                             </div>
                         </div>
@@ -256,7 +266,9 @@ export default function BookingPage() {
 
                     <button
                         type="submit"
-                        className="w-full sm:max-w-xs mt-6 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded focus:ring-2 focus:ring-blue-500"
+                        className="w-full sm:max-w-xs mx-auto block mt-8 bg-blue-600 hover:bg-blue-700
+                       text-white text-lg font-medium py-3 px-6 rounded-xl
+                       shadow-sm hover:shadow-md transition-all duration-300"
                     >
                         Confirm Booking
                     </button>
