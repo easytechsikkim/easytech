@@ -46,7 +46,7 @@ export default function CategorySection() {
                         <Link
                             key={id}
                             to={`/services?category=${id}`}
-                            className="group flex flex-col items-center rounded-2xl border border-stone-300 bg-white/80 backdrop-blur-sm shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 p-3 gap-4"
+                            className="group flex flex-col items-center rounded-2xl border border-stone-300 bg-white/80 backdrop-blur-sm shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 p-2 gap-4"
                         >
                             {/* Image wrapper - bigger but padded inside */}
                             <div
