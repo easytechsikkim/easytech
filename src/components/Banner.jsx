@@ -27,25 +27,35 @@ export default function Banner() {
 
     return (
         <section
-            className="relative mt-14 h-[70vh] flex items-center justify-center text-center overflow-hidden"
-            style={{ backgroundImage: `url(${imageURL})` }}
-        >
-            {/* Overlay with gradient (modern look) */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60"></div>
+            className="relative mt-14 min-h-[50vh] md:min-h-[70vh] flex items-center justify-center text-center overflow-hidden bg-black">
+            {/* Banner Image with responsive sizing */}
+            <img
+                src={imageURL}
+                alt={title}
+                className="absolute inset-0 w-full h-full object-cover md:object-cover sm:object-contain mx-auto"
+                loading="eager"
+            />
 
-            <div className="relative z-10 max-w-3xl mx-auto px-6 animate-fadeInUp">
-                <h1 className="text-4xl md:text-6xl font-extrabold text-white drop-shadow-lg mb-4">
-                    {title}
-                </h1>
-                <p className="text-lg md:text-2xl text-gray-200 mb-8">
-                    {subtitle}
-                </p>
-                <Link
-                    to={ctaLink}
-                    className="inline-block px-6 py-3 bg-white text-black font-semibold rounded-xl shadow-lg hover:scale-105 hover:bg-gray-100 transition-transform"
-                >
-                    {ctaText}
-                </Link>
+            {/* Enhanced gradient overlay */}
+            <div
+                className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/50 to-black/90 md:from-black/80 md:via-black/30 md:to-black/80"></div>
+
+            {/* Responsive text container */}
+            <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div className="max-w-3xl mx-auto">
+                    <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-white drop-shadow-lg mb-3 md:mb-4 px-2">
+                        {title}
+                    </h1>
+                    <p className="text-base sm:text-lg md:text-xl text-gray-200 mb-4 sm:mb-5 md:mb-6 max-w-2xl mx-auto">
+                        {subtitle}
+                    </p>
+                    <Link
+                        to={ctaLink}
+                        className="inline-block px-5 py-2.5 sm:px-6 sm:py-3 bg-white text-black font-semibold rounded-xl shadow-lg hover:scale-105 hover:bg-gray-100 active:scale-95 transition-all duration-200 text-base sm:text-lg"
+                    >
+                        {ctaText}
+                    </Link>
+                </div>
             </div>
         </section>
     );
